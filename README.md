@@ -111,7 +111,12 @@ sync` records each one once in the run's audit log (`policy denied`, `refused`).
 
 ## Releases
 
-- **4.0.0** (2026-10-28): its own repository (the plugin's version is now the pack's release, as for every OTO pack: `oto pack check` holds them together), , Cynergis/oto-factory (ADR-0007): the plugin and the
+- **5.0.0** (2026-10-28): pinned to the engine release that loads a pack's `code/`: the manifest asks
+  for `engine >=0.14.2`, CI installs the engine at `v0.14.2` instead of main, and the Actions workflow
+  installs it at the tag too and takes the plugins from the registry (Cynergis/oto-registry): the
+  engine's own marketplace no longer carries the factory. Nothing changes in the plugin or the ontology.
+- **4.0.0** (2026-10-28): its own repository, Cynergis/oto-factory (ADR-0007), and the plugin's version
+  is the pack's release from here on, as for every OTO pack (`oto pack check` holds them together): the plugin and the
   factory-run pack (release 3) with the engine-side commands in its `code/`, listed in the registry,
   installed whole (`/plugin install oto-factory@cynergis`, or `oto pack add`); the engine's repository
   forgets it. Needs an engine that loads a pack's `code/`: built from main after 2026-10-28, or 0.14.2 and later.

@@ -9,9 +9,11 @@ name: oto factory
 # `oto factory run promote`, never here.
 #
 # Copy this file to .github/workflows/ in the code repository. Needs: the repository secret
-# ANTHROPIC_API_KEY. Optional repository variables: OTO_ENGINE (the engine repository, also the
-# plugin marketplace; default Cynergis/oto), OTO_MODEL (default claude-opus-5), OTO_GRAPH (the graph
-# project's path or repository, when it is not the `graph/` directory of this repository).
+# ANTHROPIC_API_KEY. Optional repository variables: OTO_ENGINE (the engine repository; default
+# Cynergis/oto), OTO_ENGINE_REF (its tag; default v0.14.2, the release the pack asks for), OTO_REGISTRY
+# (the plugin marketplace that lists the engine and the factory; default Cynergis/oto-registry),
+# OTO_MODEL (default claude-opus-5), OTO_GRAPH (the graph project's path or repository, when it is
+# not the `graph/` directory of this repository).
 
 on:
   workflow_dispatch:
@@ -46,10 +48,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install the engine from its repository
-        run: python -m pip install "oto-kg @ git+https://github.com/${ENGINE}"
+      - name: Install the engine at its release
+        run: python -m pip install "oto-kg @ git+https://github.com/${ENGINE}@${ENGINE_REF}"
         env:
           ENGINE: ${{ vars.OTO_ENGINE || 'Cynergis/oto' }}
+          ENGINE_REF: ${{ vars.OTO_ENGINE_REF || 'v0.14.2' }}
       - name: Write the spec, the scope and the criteria from the graph
         id: spec
         env:
@@ -82,10 +85,10 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           plugin_marketplaces: |
-            https://github.com/${{ vars.OTO_ENGINE || 'Cynergis/oto' }}.git
+            https://github.com/${{ vars.OTO_REGISTRY || 'Cynergis/oto-registry' }}.git
           plugins: |
-            oto@oto
-            oto-factory@oto
+            oto@cynergis
+            oto-factory@cynergis
           claude_args: |
             --model "${{ vars.OTO_MODEL || 'claude-opus-5' }}"
             --allowedTools "Bash,Edit,Write,MultiEdit,Read,Glob,Grep"

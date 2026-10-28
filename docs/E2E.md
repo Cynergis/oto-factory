@@ -39,7 +39,7 @@ echo '{"cwd": "'$PWD'", "stop_hook_active": false}' | python3 -I /path/to/oto-fa
 echo '{"verdict": "fail", "gaps": ["the IBAN is not validated"]}' > .factory/verdict.json
 echo '{"cwd": "'$PWD'", "stop_hook_active": true}' | python3 -I /path/to/oto-factory/hooks/loop.py                                                              # block: the gap
 # twice more: the cap of 3 is reached, the run is escalated
-/plugin marketplace add Cynergis/oto && /plugin install oto-factory@cynergis-engine                                                                              # in Claude Code
+/plugin marketplace add Cynergis/oto-registry && /plugin install oto-factory@cynergis                                                                           # in Claude Code
 ```
 
 Pass when the scope names the component's modules and what `--allow` adds, `contracts/` read-only,
@@ -48,7 +48,7 @@ a shell command that writes a contract, allows reads and edits inside the scope,
 no run and blocks every write with a broken snapshot; the loop sends the runner to the evaluator
 without a verdict, back to the gaps on a fail, ends on a pass, and at the cap lets the session stop
 with the run escalated; the agents' definitions give the evaluator no edit tool and say it never
-sees the runner's reasoning; and the marketplace lists `oto-factory` beside `oto`.
+sees the runner's reasoning; and the registry's marketplace lists `oto-factory` beside `oto`.
 
 Then the run graph and promotion (I8, J4, M4):
 

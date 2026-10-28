@@ -5,8 +5,9 @@ projects, the criteria `oto factory criteria` draws, the context's own questions
 never loose files. The GitHub Actions path runs the same plugin, so the same hooks, as local
 Claude Code, and keeps the run graph as a CI artifact. Metrics are queries over the run graph:
 iterations to pass, escalation rate, evaluator-versus-tests disagreement; cost is not the hooks'
-to know. The plugin is released as 4.0.0 from its own repository (ADR-0007), and the work pack
-lets a named person decide a milestone reached, which is how phase 5 is recorded on the roadmap."""
+to know. The plugin is released from its own repository (ADR-0007), pinned to the engine release that
+loads a pack's code/, and the work pack lets a named person decide a milestone reached, which is
+how phase 5 is recorded on the roadmap."""
 import contextlib
 import io
 import json
@@ -171,8 +172,38 @@ def test_the_plugin_is_released():
         plugin = json.load(f)
     with open(os.path.join(ROOT, "manifest.json"), encoding="utf-8") as f:
         pack = json.load(f)
-    assert plugin["version"] == "4.0.0" and pack["release"] == 4 and pack["ontology"]["name"] == "factory-run"
+    assert plugin["version"] == "5.0.0" and pack["release"] == 5 and pack["ontology"]["name"] == "factory-run"
+    assert pack["changelog"][-1]["release"] == 5, "the manifest's changelog carries the release"
     with open(os.path.join(PLUGIN, "README.md"), encoding="utf-8") as f:
         readme = f.read()
-    assert "## Releases" in readme and "4.0.0" in readme and "0.3.0" in readme
+    assert "## Releases" in readme and "5.0.0" in readme and "4.0.0" in readme and "0.3.0" in readme
     assert "ADR-0007" in readme and "oto pack add" in readme
+    assert ", ," not in readme
+    with open(os.path.join(ROOT, "CHANGELOG.md"), encoding="utf-8") as f:
+        changelog = f.read()
+    assert "## 5.0.0" in changelog and "0.14.2" in changelog
+
+
+ENGINE_RELEASE = "0.14.2"
+
+
+def test_the_pack_is_pinned_to_the_engine_release_that_loads_its_code():
+    """The engine that loads a pack's code/ is released: the pack asks for it, CI installs it at its
+    tag rather than from main, the Actions workflow does the same and takes the plugins from the
+    registry (the engine's own marketplace no longer carries the factory), and the E2E installs
+    from the registry."""
+    with open(os.path.join(ROOT, "manifest.json"), encoding="utf-8") as f:
+        pack = json.load(f)
+    assert pack["engine"] == ">=" + ENGINE_RELEASE
+    with open(os.path.join(ROOT, ".github", "workflows", "ci.yml"), encoding="utf-8") as f:
+        ci = f.read()
+    assert "OTO_ENGINE_REF: v" + ENGINE_RELEASE in ci and "OTO_ENGINE_REF: main" not in ci
+    with open(os.path.join(PLUGIN, "workflows", "oto-factory.yml"), encoding="utf-8") as f:
+        actions = f.read()
+    assert "v" + ENGINE_RELEASE in actions, "the engine is installed at its tag"
+    assert "Cynergis/oto-registry" in actions and "oto-factory@cynergis" in actions and "oto@cynergis" in actions
+    assert "oto-factory@oto" not in actions and "oto@oto" not in actions, "the engine's marketplace lists only the engine"
+    with open(os.path.join(ROOT, "docs", "E2E.md"), encoding="utf-8") as f:
+        e2e = f.read()
+    assert "/plugin marketplace add Cynergis/oto-registry" in e2e and "oto-factory@cynergis" in e2e
+    assert "cynergis-engine" not in e2e and "marketplace add Cynergis/oto " not in e2e
