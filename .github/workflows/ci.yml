@@ -2,7 +2,8 @@ name: CI
 
 # The factory's tests against the engine it depends on. The engine is installed from its repository;
 # this pack's ontology (with its code) is found under ontology/ here, as it would be under an installed
-# plugin. OTO_ENGINE_REF pins which engine: main until the engine that loads a pack's code/ is released.
+# plugin. OTO_ENGINE_REF pins which engine: the release the pack manifest asks for (`engine`), the first
+# that loads a pack's code/.
 
 on:
   push:
@@ -13,7 +14,7 @@ permissions:
   contents: read
 
 env:
-  OTO_ENGINE_REF: main
+  OTO_ENGINE_REF: v0.14.2
 
 jobs:
   test:

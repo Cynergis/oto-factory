@@ -2,6 +2,15 @@
 
 What each release of the factory changed. The engine's own changelog is in Cynergis/oto.
 
+## 5.0.0 — 2026-10-28
+
+**Pinned to the engine that loads a pack's `code/`.** OTO 0.14.2 is released, so the pack asks for it:
+`engine >=0.14.2` in the manifest, and CI installs the engine at `v0.14.2` instead of main. The Actions
+workflow (`workflows/oto-factory.yml`) installs the engine at the tag too (the `OTO_ENGINE_REF`
+variable moves it) and takes the plugins from the registry, Cynergis/oto-registry, as `oto@cynergis`
+and `oto-factory@cynergis`: the engine's own marketplace lists only the engine now. The E2E installs
+from the registry. Nothing changes in the plugin or the ontology (factory-run stays at release 3).
+
 ## 4.0.0 — 2026-10-28
 
 **Its own repository.** The plugin version is the pack release from now on, as for every OTO pack (0.3.0 → 4.0.0). The factory is a use case of the OTO graph, not a knowledge graph
