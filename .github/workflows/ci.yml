@@ -1,0 +1,42 @@
+name: CI
+
+# The factory's tests against the engine it depends on. The engine is installed from its repository;
+# this pack's ontology (with its code) is found under ontology/ here, as it would be under an installed
+# plugin. OTO_ENGINE_REF pins which engine: main until the engine that loads a pack's code/ is released.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  OTO_ENGINE_REF: main
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install the engine and pytest
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "oto-kg[intake] @ git+https://github.com/Cynergis/oto@${OTO_ENGINE_REF}" pytest
+      - name: The pack checks
+        run: oto pack check .
+      - name: Tests
+        run: python -m pytest -q
+      - name: One reader, in both plugins
+        # The two plain-Python guards share one snapshot reader, copied byte for byte: this copy against the engine's.
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/Cynergis/oto/${OTO_ENGINE_REF}/hooks/policy_snapshot.py" -o /tmp/engine_policy_snapshot.py
+          diff -q hooks/policy_snapshot.py /tmp/engine_policy_snapshot.py
