@@ -33,8 +33,10 @@ they refuse.
 in the engine): a pack that carries the plugin, the `factory-run` ontology and the engine-side
 commands in the ontology's `code/`, which the engine loads when the pack is installed. From the
 registry: `/plugin marketplace add Cynergis/oto-registry`, then `/plugin install oto-factory@cynergis`;
-from a terminal, `oto pack add https://github.com/Cynergis/oto-factory`. It needs the engine plugin
-(`oto`) for the graph tools and a graph with the `architecture` or `ddd` ontology. Nothing of the
+from a terminal, `oto pack add https://github.com/Cynergis/oto-factory`. It needs the engine plugin for
+the graph tools, from the engine's own marketplace (`/plugin marketplace add Cynergis/oto`, then
+`/plugin install oto@cynergis-engine`: the registry carries no engine, ADR-0009), and a graph with the
+`architecture` or `ddd` ontology. Nothing of the
 factory ships with the engine.
 
 **The commands**, `oto factory`, provided by the pack and reading the graph: `oto factory spec

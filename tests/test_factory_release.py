@@ -184,7 +184,7 @@ def test_the_plugin_is_released():
     assert "## 5.0.0" in changelog and "0.14.2" in changelog
 
 
-ENGINE_RELEASE = "0.14.2"
+ENGINE_RELEASE = "0.14.3"
 
 
 def test_the_pack_is_pinned_to_the_engine_release_that_loads_its_code():
@@ -201,9 +201,12 @@ def test_the_pack_is_pinned_to_the_engine_release_that_loads_its_code():
     with open(os.path.join(PLUGIN, "workflows", "oto-factory.yml"), encoding="utf-8") as f:
         actions = f.read()
     assert "v" + ENGINE_RELEASE in actions, "the engine is installed at its tag"
-    assert "Cynergis/oto-registry" in actions and "oto-factory@cynergis" in actions and "oto@cynergis" in actions
-    assert "oto-factory@oto" not in actions and "oto@oto" not in actions, "the engine's marketplace lists only the engine"
+    assert "Cynergis/oto-registry" in actions and "oto-factory@cynergis" in actions and "oto@cynergis-engine" in actions
+    assert "oto@cynergis\n" not in actions and "oto-factory@oto" not in actions and "oto@oto" not in actions, \
+        "the engine comes from its own marketplace, cynergis-engine; the registry carries no engine (ADR-0009)"
+    block = actions[actions.index("plugin_marketplaces:"):actions.index("plugins:")]
+    assert block.index("'Cynergis/oto'") < block.index("'Cynergis/oto-registry'"), "the engine's marketplace first"
     with open(os.path.join(ROOT, "docs", "E2E.md"), encoding="utf-8") as f:
         e2e = f.read()
     assert "/plugin marketplace add Cynergis/oto-registry" in e2e and "oto-factory@cynergis" in e2e
-    assert "cynergis-engine" not in e2e and "marketplace add Cynergis/oto " not in e2e
+    assert "oto@cynergis-engine" in e2e and "marketplace add Cynergis/oto " in e2e, "the engine from its own marketplace, before the registry"
