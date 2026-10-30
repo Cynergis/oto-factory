@@ -10,8 +10,9 @@ name: oto factory
 #
 # Copy this file to .github/workflows/ in the code repository. Needs: the repository secret
 # ANTHROPIC_API_KEY. Optional repository variables: OTO_ENGINE (the engine repository; default
-# Cynergis/oto), OTO_ENGINE_REF (its tag; default v0.14.2, the release the pack asks for), OTO_REGISTRY
-# (the plugin marketplace that lists the engine and the factory; default Cynergis/oto-registry),
+# Cynergis/oto, also the engine plugin's own marketplace), OTO_ENGINE_REF (its tag; default v0.14.2, the
+# release the pack asks for), OTO_REGISTRY (the plugin marketplace that lists the factory; default
+# Cynergis/oto-registry; it carries no engine, ADR-0009),
 # OTO_MODEL (default claude-opus-5), OTO_GRAPH (the graph project's path or repository, when it is
 # not the `graph/` directory of this repository).
 
@@ -85,9 +86,10 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           plugin_marketplaces: |
+            https://github.com/${{ vars.OTO_ENGINE || 'Cynergis/oto' }}.git
             https://github.com/${{ vars.OTO_REGISTRY || 'Cynergis/oto-registry' }}.git
           plugins: |
-            oto@cynergis
+            oto@cynergis-engine
             oto-factory@cynergis
           claude_args: |
             --model "${{ vars.OTO_MODEL || 'claude-opus-5' }}"

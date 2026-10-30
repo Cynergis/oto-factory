@@ -39,7 +39,7 @@ echo '{"cwd": "'$PWD'", "stop_hook_active": false}' | python3 -I /path/to/oto-fa
 echo '{"verdict": "fail", "gaps": ["the IBAN is not validated"]}' > .factory/verdict.json
 echo '{"cwd": "'$PWD'", "stop_hook_active": true}' | python3 -I /path/to/oto-factory/hooks/loop.py                                                              # block: the gap
 # twice more: the cap of 3 is reached, the run is escalated
-/plugin marketplace add Cynergis/oto-registry && /plugin install oto-factory@cynergis                                                                           # in Claude Code
+/plugin marketplace add Cynergis/oto && /plugin install oto@cynergis-engine && /plugin marketplace add Cynergis/oto-registry && /plugin install oto-factory@cynergis                                                                           # in Claude Code
 ```
 
 Pass when the scope names the component's modules and what `--allow` adds, `contracts/` read-only,

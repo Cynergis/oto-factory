@@ -226,7 +226,7 @@ def test_the_plugin_is_packaged_as_a_pack_of_its_own():
     with open(os.path.join(PLUGIN, ".claude-plugin", "plugin.json"), encoding="utf-8") as f:
         plugin = json.load(f)
     assert plugin["name"] == "oto-factory" and plugin["version"] and plugin["license"] == "Apache-2.0"
-    assert "oto" in plugin.get("dependencies", []), "the factory needs the engine plugin for the graph tools"
+    assert plugin.get("dependencies") == ["oto@cynergis-engine"], "the factory needs the engine plugin, from the engine's own marketplace (ADR-0009)"
     with open(os.path.join(ROOT, "manifest.json"), encoding="utf-8") as f:
         pack = json.load(f)
     assert pack["name"] == "oto-factory" and pack["ontology"]["name"] == "factory-run" and pack["ontology"]["path"] == "ontology/factory-run"
