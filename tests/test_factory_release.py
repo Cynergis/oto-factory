@@ -172,16 +172,16 @@ def test_the_plugin_is_released():
         plugin = json.load(f)
     with open(os.path.join(ROOT, "manifest.json"), encoding="utf-8") as f:
         pack = json.load(f)
-    assert plugin["version"] == "5.0.0" and pack["release"] == 5 and pack["ontology"]["name"] == "factory-run"
-    assert pack["changelog"][-1]["release"] == 5, "the manifest's changelog carries the release"
+    assert plugin["version"] == "6.0.0" and pack["release"] == 6 and pack["ontology"]["name"] == "factory-run"
+    assert pack["changelog"][-1]["release"] == 6, "the manifest's changelog carries the release"
     with open(os.path.join(PLUGIN, "README.md"), encoding="utf-8") as f:
         readme = f.read()
-    assert "## Releases" in readme and "5.0.0" in readme and "4.0.0" in readme and "0.3.0" in readme
+    assert "## Releases" in readme and "6.0.0" in readme and "5.0.0" in readme and "4.0.0" in readme and "0.3.0" in readme
     assert "ADR-0007" in readme and "oto pack add" in readme
     assert ", ," not in readme
     with open(os.path.join(ROOT, "CHANGELOG.md"), encoding="utf-8") as f:
         changelog = f.read()
-    assert "## 5.0.0" in changelog and "0.14.2" in changelog
+    assert "## 6.0.0" in changelog and "0.14.3" in changelog and "oto@cynergis-engine" in changelog
 
 
 ENGINE_RELEASE = "0.14.3"

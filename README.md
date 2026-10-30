@@ -113,6 +113,9 @@ sync` records each one once in the run's audit log (`policy denied`, `refused`).
 
 ## Releases
 
+- **6.0.0** (2026-10-30): the engine plugin comes from its own marketplace (OTO's ADR-0009): the plugin
+  depends on `oto@cynergis-engine`, the Actions workflow adds `Cynergis/oto` as a marketplace before the
+  registry and installs the engine from it, and the pack asks for `engine >=0.14.3`, installed at `v0.14.3`.
 - **5.0.0** (2026-10-28): pinned to the engine release that loads a pack's `code/`: the manifest asks
   for `engine >=0.14.2`, CI installs the engine at `v0.14.2` instead of main, and the Actions workflow
   installs it at the tag too and takes the plugins from the registry (Cynergis/oto-registry): the
