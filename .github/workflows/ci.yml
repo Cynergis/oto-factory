@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 env:
-  OTO_ENGINE_REF: v0.14.2
+  OTO_ENGINE_REF: v0.14.3
 
 jobs:
   test:

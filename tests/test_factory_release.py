@@ -184,7 +184,7 @@ def test_the_plugin_is_released():
     assert "## 5.0.0" in changelog and "0.14.2" in changelog
 
 
-ENGINE_RELEASE = "0.14.2"
+ENGINE_RELEASE = "0.14.3"
 
 
 def test_the_pack_is_pinned_to_the_engine_release_that_loads_its_code():
